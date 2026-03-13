@@ -1,0 +1,24 @@
+# Rug pull predictor — config placeholder
+# Update during Phase 1 (data) and Phase 3 (model).
+# Data source: DexScreener API (https://api.dexscreener.com)
+
+data:
+  # DexScreener API (no key required; 300 req/min pairs/search)
+  dexscreener_base_url: "https://api.dexscreener.com"
+  # Paths (relative to project root)
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  # Labeled dataset: target sizes (build_labeled_dataset.py)
+  target_rug_pairs: 700    # from Comparitech names matched to DexScreener (~678 typically match)
+  target_nonrug_pairs: 700 # from CoinGecko top by market cap, matched to DexScreener
+  # Time-series: Birdeye OHLCV (build_timeseries_dataset.py); requires BIRDEYE_API_KEY
+  bucket_minutes: 1
+  num_buckets: 120   # 2 hours × 1 min
+  timeseries_features: ["log_return", "volume", "high_low_pct"]
+  # Rug-pull label: token in Comparitech list → 1; from CoinGecko top → 0
+
+model:
+  # Baseline: summary stats from first hour
+  baseline_first_n_buckets: 60
+  # Primary: sequence length = num_buckets
+  input_features: []   # e.g. ["log_return", "volume", "n_trades", "buy_sell_diff", "liquidity"]
