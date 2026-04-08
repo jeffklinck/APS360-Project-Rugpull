@@ -1,9 +1,4 @@
-"""
-CoinGecko API client for fetching top coins by market cap (non–rug-pull set).
-Free API: https://api.coingecko.com/api/v3 (no key). ~30 calls/min on free tier.
-
-Use /coins/markets to get biggest/oldest (by market_cap) tokens for negative labels.
-"""
+"""CoinGecko /coins/markets (no key, rate-limit sleeps in caller)."""
 
 from __future__ import annotations
 
@@ -23,10 +18,7 @@ def coins_markets(
     per_page: int = 250,
     page: int = 1,
 ) -> list[dict]:
-    """
-    GET /coins/markets — list coins sorted by market cap (desc = biggest first).
-    Returns list of dicts: id, symbol, name, market_cap, market_cap_rank, current_price, etc.
-    """
+    """GET /coins/markets."""
     r = requests.get(
         f"{COINGECKO_BASE}/coins/markets",
         params={

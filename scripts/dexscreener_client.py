@@ -1,8 +1,4 @@
-"""
-DexScreener API client for rug-pull predictor data.
-Base URL: https://api.dexscreener.com
-No API key required. Rate limits: 300 req/min (pairs/search), 60/min (token-profiles, orders).
-"""
+"""DexScreener HTTP helpers (api.dexscreener.com, no key)."""
 
 from __future__ import annotations
 
@@ -16,7 +12,6 @@ DEXSCREENER_BASE = "https://api.dexscreener.com"
 
 
 def _load_base_url_from_config() -> str:
-    """Load dexscreener_base_url from configs/config.yaml if present (optional PyYAML)."""
     try:
         import yaml
         config_path = Path(__file__).resolve().parent.parent / "configs" / "config.yaml"
@@ -30,11 +25,7 @@ def _load_base_url_from_config() -> str:
 
 
 def search(query: str, base_url: str | None = None) -> list[dict]:
-    """
-    Search for pairs/tokens by name, symbol, or address.
-    GET /latest/dex/search?q=QUERY
-    Returns list of pair objects (chainId, pairAddress, baseToken, quoteToken, priceUsd, etc.).
-    """
+    """Search pairs; GET /latest/dex/search."""
     base = base_url or _load_base_url_from_config()
     r = requests.get(f"{base}/latest/dex/search", params={"q": query}, timeout=30)
     r.raise_for_status()
@@ -43,11 +34,7 @@ def search(query: str, base_url: str | None = None) -> list[dict]:
 
 
 def get_pair(chain_id: str, pair_address: str, base_url: str | None = None) -> dict | None:
-    """
-    Get detailed data for one pair.
-    GET /latest/dex/pairs/{chainId}/{pairAddress}
-    Returns single pair object or None if not found.
-    """
+    """One pair; GET /latest/dex/pairs/..."""
     base = base_url or _load_base_url_from_config()
     r = requests.get(f"{base}/latest/dex/pairs/{chain_id}/{pair_address}", timeout=30)
     if r.status_code == 404:
@@ -58,11 +45,7 @@ def get_pair(chain_id: str, pair_address: str, base_url: str | None = None) -> d
 
 
 def get_token_pairs(chain_id: str, token_address: str, base_url: str | None = None) -> list[dict]:
-    """
-    Get all pairs for a token.
-    GET /token-pairs/v1/{chainId}/{tokenAddress}
-    Returns list of pair objects.
-    """
+    """GET /token-pairs/v1/..."""
     base = base_url or _load_base_url_from_config()
     r = requests.get(f"{base}/token-pairs/v1/{chain_id}/{token_address}", timeout=30)
     r.raise_for_status()
@@ -71,10 +54,7 @@ def get_token_pairs(chain_id: str, token_address: str, base_url: str | None = No
 
 
 def get_tokens(chain_id: str, token_addresses: list[str], base_url: str | None = None) -> list[dict]:
-    """
-    Get token data for multiple addresses (comma-separated in API).
-    GET /tokens/v1/{chainId}/{tokenAddresses}
-    """
+    """GET /tokens/v1/..."""
     base = base_url or _load_base_url_from_config()
     addrs = ",".join(token_addresses)
     r = requests.get(f"{base}/tokens/v1/{chain_id}/{addrs}", timeout=30)

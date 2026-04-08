@@ -1,18 +1,4 @@
-"""
-Known rug pulls / scams from Comparitech (Rebecca Moody) for labeling.
-Source: https://www.comparitech.com/crypto/cryptocurrency-scams/
-
-The full database (45+ pages) is in a Google Sheet; the article links to it as
-"request access here". Direct link:
-  https://docs.google.com/spreadsheets/d/1YVRvck6cLJmSjpuWA_BNfi7otMEdRpJzTxlm70xa0Zo/edit?usp=sharing
-
-To use the full list: request access → File → Download → CSV → save as
-  data/raw/comparitech_rugpulls.csv
-See docs/COMPARITECH_DATA.md for step-by-step.
-
-Use this list to label tokens: if a token name/symbol matches an entry here,
-we treat it as a known rug pull (label = 1).
-"""
+"""Rug name set for labels; optional full CSV at data/raw/comparitech_rugpulls.csv."""
 
 from __future__ import annotations
 

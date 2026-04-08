@@ -40,3 +40,8 @@ data/processed/
 logs/
 checkpoints/
 *.ckpt
+
+# Local notes / course docs (not part of repo)
+docs/
+CHECKIN_PLAN.md
+COMMIT.md
